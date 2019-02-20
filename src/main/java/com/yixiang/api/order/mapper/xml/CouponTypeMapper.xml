@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.order.mapper.CouponTypeMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.order.pojo.CouponType">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_operator" jdbcType="INTEGER" property="operator" />
+    <result column="t_title" jdbcType="VARCHAR" property="title" />
+    <result column="t_category" jdbcType="INTEGER" property="category" />
+    <result column="t_reduce_type" jdbcType="INTEGER" property="reduceType" />
+    <result column="t_amount" jdbcType="REAL" property="amount" />
+    <result column="t_pattern" jdbcType="VARCHAR" property="pattern" />
+    <result column="t_duration" jdbcType="INTEGER" property="duration" />
+    <result column="t_description" jdbcType="VARCHAR" property="description" />
+    <result column="t_cond" jdbcType="VARCHAR" property="cond" />
+    <result column="t_remark" jdbcType="VARCHAR" property="remark" />
+    <result column="t_state" jdbcType="INTEGER" property="state" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.operator as t_operator, t.title as t_title, t.category as t_category, 
+    t.reduce_type as t_reduce_type, t.amount as t_amount, t.pattern as t_pattern, t.duration as t_duration, 
+    t.description as t_description, t.cond as t_cond, t.remark as t_remark, 
+    t.state as t_state, t.create_time as t_create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from coupon_type t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+	<if test="lock!=null and lock">
+		for update
+	</if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.order.pojo.CouponType" useGeneratedKeys="true" keyProperty="id">
+    insert into coupon_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="category != null">
+        category,
+      </if>
+      <if test="reduceType != null">
+        reduce_type,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="pattern != null">
+        pattern,
+      </if>
+      <if test="duration != null">
+        duration,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="cond != null">
+        cond,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="operator != null">
+        #{operator,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=INTEGER},
+      </if>
+      <if test="reduceType != null">
+        #{reduceType,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=REAL},
+      </if>
+      <if test="pattern != null">
+        #{pattern,jdbcType=VARCHAR},
+      </if>
+      <if test="duration != null">
+        #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="cond != null">
+        #{cond,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from coupon_type t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update coupon_type t
+    <set>
+      <if test="record.operator != null">
+        t.operator = #{record.operator,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null">
+        t.title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.category != null">
+        t.category = #{record.category,jdbcType=INTEGER},
+      </if>
+      <if test="record.reduceType != null">
+        t.reduce_type = #{record.reduceType,jdbcType=INTEGER},
+      </if>
+      <if test="record.amount != null">
+        t.amount = #{record.amount,jdbcType=REAL},
+      </if>
+      <if test="record.pattern != null">
+        t.pattern = #{record.pattern,jdbcType=VARCHAR},
+      </if>
+      <if test="record.duration != null">
+        t.duration = #{record.duration,jdbcType=INTEGER},
+      </if>
+      <if test="record.description != null">
+        t.description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cond != null">
+        t.cond = #{record.cond,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        t.remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        t.state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

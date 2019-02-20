@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.order.mapper.OrderInfoMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.order.pojo.OrderInfo">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_user_id" jdbcType="INTEGER" property="userId" />
+    <result column="t_charge_id" jdbcType="VARCHAR" property="chargeId" />
+    <result column="t_bill_id" jdbcType="VARCHAR" property="billId" />
+    <result column="t_connector_id" jdbcType="INTEGER" property="connectorId" />
+    <result column="t_coupon_id" jdbcType="INTEGER" property="couponId" />
+    <result column="t_station_id" jdbcType="INTEGER" property="stationId" />
+    <result column="t_charge_state" jdbcType="VARCHAR" property="chargeState" />
+    <result column="t_start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="t_end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="t_total_time" jdbcType="INTEGER" property="totalTime" />
+    <result column="t_total_power" jdbcType="REAL" property="totalPower" />
+    <result column="t_total_power_price" jdbcType="REAL" property="totalPowerPrice" />
+    <result column="t_total_service_fee" jdbcType="REAL" property="totalServiceFee" />
+    <result column="t_total_price" jdbcType="REAL" property="totalPrice" />
+    <result column="t_pay_price" jdbcType="REAL" property="payPrice" />
+    <result column="t_total_balance" jdbcType="REAL" property="totalBalance" />
+    <result column="t_pay_way" jdbcType="INTEGER" property="payWay" />
+    <result column="t_trade_no" jdbcType="VARCHAR" property="tradeNo" />
+    <result column="t_out_trade_no" jdbcType="VARCHAR" property="outTradeNo" />
+    <result column="t_end_code" jdbcType="VARCHAR" property="endCode" />
+    <result column="t_current" jdbcType="REAL" property="current" />
+    <result column="t_power" jdbcType="REAL" property="power" />
+    <result column="t_soc" jdbcType="VARCHAR" property="soc" />
+    <result column="t_provider" jdbcType="INTEGER" property="provider" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="t_pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="t_refund_time" jdbcType="TIMESTAMP" property="refundTime" />
+    <result column="t_state" jdbcType="INTEGER" property="state" />
+    <result column="t_remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.user_id as t_user_id, t.charge_id as t_charge_id, t.bill_id as t_bill_id, 
+    t.connector_id as t_connector_id, t.station_id as t_station_id, t.charge_state as t_charge_state, 
+    t.start_time as t_start_time, t.end_time as t_end_time, t.total_time as t_total_time, 
+    t.total_power as t_total_power, t.total_power_price as t_total_power_price, t.total_service_fee as t_total_service_fee, 
+    t.total_price as t_total_price, t.total_balance as t_total_balance, t.pay_way as t_pay_way, 
+    t.trade_no as t_trade_no, t.out_trade_no as t_out_trade_no, t.end_code as t_end_code, 
+    t.current as t_current, t.power as t_power, t.soc as t_soc, t.provider as t_provider, 
+    t.create_time as t_create_time, t.state as t_state, t.pay_price as t_pay_price, t.coupon_id as t_coupon_id,
+    t.pay_time as t_pay_time, t.refund_time as t_refund_time, t.remark as t_remark
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from order_info t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+	<if test="lock!=null and lock">
+		for update
+	</if>
+  </select>
+  <!-- 按天统计快慢充订单数量 -->
+  <select id="statFastSlowOrder" resultType="java.util.Map">
+  	select date_format(t.create_time,'%Y-%m-%d') as ot,count(t.id) as useAmount,count(case when t.state in (1,2,3,4,5) then t.id end) as orderAmount 
+  	from order_info t inner join charging_station t1 on (t.station_id=t1.id)
+  	<trim prefix="where" prefixOverrides="and"> 
+  	<if test="null!=param.startDate">
+		and t.create_time&gt;=#{param.startDate}
+	</if>
+	<if test="null!=param.endDate">
+		and t.create_time&lt;#{param.endDate}
+	</if>
+	<if test="null!=param.providerId">
+		and t1.provider_id=#{param.providerId}
+	</if>
+	<if test="null!=param.areaId">
+		and t1.area_id=#{param.areaId}
+	</if>
+	<if test="null!=param.connectorType">
+		and exists(select '' from connector_info where id=t.connector_id and connector_type=#{param.connectorType})
+	</if>
+	</trim>
+  	group by ot
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.order.pojo.OrderInfo" useGeneratedKeys="true" keyProperty="id">
+    insert into order_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="chargeId != null">
+        charge_id,
+      </if>
+      <if test="billId != null">
+        bill_id,
+      </if>
+      <if test="connectorId != null">
+        connector_id,
+      </if>
+      <if test="couponId != null">
+        coupon_id,
+      </if>
+      <if test="stationId != null">
+        station_id,
+      </if>
+      <if test="chargeState != null">
+        charge_state,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="totalTime != null">
+        total_time,
+      </if>
+      <if test="totalPower != null">
+        total_power,
+      </if>
+      <if test="totalPowerPrice != null">
+        total_power_price,
+      </if>
+      <if test="totalServiceFee != null">
+        total_service_fee,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
+      </if>
+      <if test="payPrice != null">
+        pay_price,
+      </if>
+      <if test="totalBalance != null">
+        total_balance,
+      </if>
+      <if test="payWay != null">
+        pay_way,
+      </if>
+      <if test="tradeNo != null">
+        trade_no,
+      </if>
+      <if test="outTradeNo != null">
+        out_trade_no,
+      </if>
+      <if test="endCode != null">
+        end_code,
+      </if>
+      <if test="current != null">
+        current,
+      </if>
+      <if test="power != null">
+        power,
+      </if>
+      <if test="soc != null">
+        soc,
+      </if>
+      <if test="provider != null">
+        provider,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="refundTime != null">
+        refund_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="chargeId != null">
+        #{chargeId,jdbcType=VARCHAR},
+      </if>
+      <if test="billId != null">
+        #{billId,jdbcType=VARCHAR},
+      </if>
+      <if test="connectorId != null">
+        #{connectorId,jdbcType=INTEGER},
+      </if>
+      <if test="couponId != null">
+        #{couponId,jdbcType=INTEGER},
+      </if>
+      <if test="stationId != null">
+        #{stationId,jdbcType=INTEGER},
+      </if>
+      <if test="chargeState != null">
+        #{chargeState,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalTime != null">
+        #{totalTime,jdbcType=INTEGER},
+      </if>
+      <if test="totalPower != null">
+        #{totalPower,jdbcType=REAL},
+      </if>
+      <if test="totalPowerPrice != null">
+        #{totalPowerPrice,jdbcType=REAL},
+      </if>
+      <if test="totalServiceFee != null">
+        #{totalServiceFee,jdbcType=REAL},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=REAL},
+      </if>
+      <if test="payPrice != null">
+        #{payPrice,jdbcType=REAL},
+      </if>
+      <if test="totalBalance != null">
+        #{totalBalance,jdbcType=REAL},
+      </if>
+      <if test="payWay != null">
+        #{payWay,jdbcType=INTEGER},
+      </if>
+      <if test="tradeNo != null">
+        #{tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="outTradeNo != null">
+        #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="endCode != null">
+        #{endCode,jdbcType=VARCHAR},
+      </if>
+      <if test="current != null">
+        #{current,jdbcType=REAL},
+      </if>
+      <if test="power != null">
+        #{power,jdbcType=REAL},
+      </if>
+      <if test="soc != null">
+        #{soc,jdbcType=VARCHAR},
+      </if>
+      <if test="provider != null">
+        #{provider,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refundTime != null">
+        #{refundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from order_info t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update order_info t
+    <set>
+      <if test="record.userId != null">
+        t.user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.chargeId != null">
+        t.charge_id = #{record.chargeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.billId != null">
+        t.bill_id = #{record.billId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectorId != null">
+        t.connector_id = #{record.connectorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.couponId != null">
+        t.coupon_id = #{record.couponId,jdbcType=INTEGER},
+      </if>
+      <if test="record.stationId != null">
+        t.station_id = #{record.stationId,jdbcType=INTEGER},
+      </if>
+      <if test="record.chargeState != null">
+        t.charge_state = #{record.chargeState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null">
+        t.start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+        t.end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.totalTime != null">
+        t.total_time = #{record.totalTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalPower != null">
+        t.total_power = #{record.totalPower,jdbcType=REAL},
+      </if>
+      <if test="record.totalPowerPrice != null">
+        t.total_power_price = #{record.totalPowerPrice,jdbcType=REAL},
+      </if>
+      <if test="record.totalServiceFee != null">
+        t.total_service_fee = #{record.totalServiceFee,jdbcType=REAL},
+      </if>
+      <if test="record.totalPrice != null">
+        t.total_price = #{record.totalPrice,jdbcType=REAL},
+      </if>
+      <if test="record.payPrice != null">
+        t.pay_price = #{record.payPrice,jdbcType=REAL},
+      </if>
+      <if test="record.totalBalance != null">
+        t.total_balance = #{record.totalBalance,jdbcType=REAL},
+      </if>
+      <if test="record.payWay != null">
+        t.pay_way = #{record.payWay,jdbcType=INTEGER},
+      </if>
+      <if test="record.tradeNo != null">
+        t.trade_no = #{record.tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outTradeNo != null">
+        t.out_trade_no = #{record.outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endCode != null">
+        t.end_code = #{record.endCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.current != null">
+        t.current = #{record.current,jdbcType=REAL},
+      </if>
+      <if test="record.power != null">
+        t.power = #{record.power,jdbcType=REAL},
+      </if>
+      <if test="record.soc != null">
+        t.soc = #{record.soc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.provider != null">
+        t.provider = #{record.provider,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.payTime != null">
+        t.pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.refundTime != null">
+        t.refund_time = #{record.refundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.state != null">
+        t.state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        t.remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

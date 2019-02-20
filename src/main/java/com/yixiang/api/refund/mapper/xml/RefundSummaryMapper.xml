@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.refund.mapper.RefundSummaryMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.refund.pojo.RefundSummary">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_user_id" jdbcType="INTEGER" property="userId" />
+    <result column="t_order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="t_order_type" jdbcType="INTEGER" property="orderType" />
+    <result column="t_total" jdbcType="REAL" property="total" />
+    <result column="t_third" jdbcType="REAL" property="third" />
+    <result column="t_third_refund" jdbcType="REAL" property="thirdRefund" />
+    <result column="t_balance" jdbcType="REAL" property="balance" />
+    <result column="t_balance_refund" jdbcType="REAL" property="balanceRefund" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="t_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.user_id as t_user_id, t.order_id as t_order_id, t.order_type as t_order_type, 
+    t.total as t_total, t.third as t_third, t.third_refund as t_third_refund, t.balance as t_balance, 
+    t.balance_refund as t_balance_refund, t.create_time as t_create_time, t.update_time as t_update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from refund_summary t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+	<if test="lock!=null and lock">
+		for update
+	</if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.refund.pojo.RefundSummary" useGeneratedKeys="true" keyProperty="id">
+    insert into refund_summary
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="orderType != null">
+        order_type,
+      </if>
+      <if test="total != null">
+        total,
+      </if>
+      <if test="third != null">
+        third,
+      </if>
+      <if test="thirdRefund != null">
+        third_refund,
+      </if>
+      <if test="balance != null">
+        balance,
+      </if>
+      <if test="balanceRefund != null">
+        balance_refund,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderType != null">
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="total != null">
+        #{total,jdbcType=REAL},
+      </if>
+      <if test="third != null">
+        #{third,jdbcType=REAL},
+      </if>
+      <if test="thirdRefund != null">
+        #{thirdRefund,jdbcType=REAL},
+      </if>
+      <if test="balance != null">
+        #{balance,jdbcType=REAL},
+      </if>
+      <if test="balanceRefund != null">
+        #{balanceRefund,jdbcType=REAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from refund_summary t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update refund_summary t
+    <set>
+      <if test="record.userId != null">
+        t.user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderId != null">
+        t.order_id = #{record.orderId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderType != null">
+        t.order_type = #{record.orderType,jdbcType=INTEGER},
+      </if>
+      <if test="record.total != null">
+        t.total = #{record.total,jdbcType=REAL},
+      </if>
+      <if test="record.third != null">
+        t.third = #{record.third,jdbcType=REAL},
+      </if>
+      <if test="record.thirdRefund != null">
+        t.third_refund = #{record.thirdRefund,jdbcType=REAL},
+      </if>
+      <if test="record.balance != null">
+        t.balance = #{record.balance,jdbcType=REAL},
+      </if>
+      <if test="record.balanceRefund != null">
+        t.balance_refund = #{record.balanceRefund,jdbcType=REAL},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        t.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

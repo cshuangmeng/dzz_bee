@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.brand.mapper.AppointmentInfoMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.brand.pojo.AppointmentInfo">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_user_id" jdbcType="INTEGER" property="userId" />
+    <result column="t_car_id" jdbcType="INTEGER" property="carId" />
+    <result column="t_linkman" jdbcType="VARCHAR" property="linkman" />
+    <result column="t_telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="t_area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="t_province" jdbcType="VARCHAR" property="province" />
+    <result column="t_city" jdbcType="VARCHAR" property="city" />
+    <result column="t_address" jdbcType="VARCHAR" property="address" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="t_state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.user_id as t_user_id, t.car_id as t_car_id, t.linkman as t_linkman, 
+    t.telephone as t_telephone, t.area_id as t_area_id, t.province as t_province, t.city as t_city, 
+    t.address as t_address, t.create_time as t_create_time, t.state as t_state
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from appointment_info t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+	<if test="lock!=null and lock">
+		for update
+	</if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.brand.pojo.AppointmentInfo" useGeneratedKeys="true" keyProperty="id">
+    insert into appointment_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="carId != null">
+        car_id,
+      </if>
+      <if test="linkman != null">
+        linkman,
+      </if>
+      <if test="telephone != null">
+        telephone,
+      </if>
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carId != null">
+        #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="linkman != null">
+        #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from appointment_info t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update appointment_info t
+    <set>
+      <if test="record.userId != null">
+        t.user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.carId != null">
+        t.car_id = #{record.carId,jdbcType=INTEGER},
+      </if>
+      <if test="record.linkman != null">
+        t.linkman = #{record.linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="record.telephone != null">
+        t.telephone = #{record.telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaId != null">
+        t.area_id = #{record.areaId,jdbcType=INTEGER},
+      </if>
+      <if test="record.province != null">
+        t.province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        t.city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        t.address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.state != null">
+        t.state = #{record.state,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

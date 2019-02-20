@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.charging.mapper.ChargingStationMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.charging.pojo.ChargingStation">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_uuid" jdbcType="VARCHAR" property="uuid" />
+    <result column="t_station_id" jdbcType="VARCHAR" property="stationId" />
+    <result column="t_area_id" jdbcType="VARCHAR" property="areaId" />
+    <result column="t_user_id" jdbcType="INTEGER" property="userId" />
+    <result column="t_source" jdbcType="INTEGER" property="source" />
+    <result column="t_construction" jdbcType="INTEGER" property="construction" />
+    <result column="t_support_order" jdbcType="INTEGER" property="supportOrder" />
+    <result column="t_match_cars" jdbcType="VARCHAR" property="matchCars" />
+    <result column="t_telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="t_service_phone" jdbcType="VARCHAR" property="servicePhone" />
+    <result column="t_provider_id" jdbcType="VARCHAR" property="providerId" />
+    <result column="t_provider" jdbcType="VARCHAR" property="provider" />
+    <result column="t_pay_way" jdbcType="VARCHAR" property="payWay" />
+    <result column="t_pay_tip" jdbcType="VARCHAR" property="payTip" />
+    <result column="t_electricity_price" jdbcType="VARCHAR" property="electricityPrice" />
+    <result column="t_fast_num" jdbcType="INTEGER" property="fastNum" />
+    <result column="t_slow_num" jdbcType="INTEGER" property="slowNum" />
+    <result column="t_times" jdbcType="INTEGER" property="times" />
+    <result column="t_is_underground" jdbcType="INTEGER" property="isUnderground" />
+    <result column="t_is_standard" jdbcType="INTEGER" property="isStandard" />
+    <result column="t_is_private" jdbcType="INTEGER" property="isPrivate" />
+    <result column="t_lat" jdbcType="DECIMAL" property="lat" />
+    <result column="t_lng" jdbcType="DECIMAL" property="lng" />
+    <result column="t_title" jdbcType="VARCHAR" property="title" />
+    <result column="t_address" jdbcType="VARCHAR" property="address" />
+    <result column="t_site_guide" jdbcType="VARCHAR" property="siteGuide" />
+    <result column="t_open_time" jdbcType="VARCHAR" property="openTime" />
+    <result column="t_parking_price" jdbcType="VARCHAR" property="parkingPrice" />
+    <result column="t_park_nums" jdbcType="INTEGER" property="parkNums" />
+    <result column="t_park_info" jdbcType="VARCHAR" property="parkInfo" />
+    <result column="t_head_img" jdbcType="VARCHAR" property="headImg" />
+    <result column="t_detail_imgs" jdbcType="VARCHAR" property="detailImgs" />
+    <result column="t_service_fee" jdbcType="VARCHAR" property="serviceFee" />
+    <result column="t_remark" jdbcType="VARCHAR" property="remark" />
+    <result column="t_state" jdbcType="INTEGER" property="state" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="t_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.uuid as t_uuid, t.station_id as t_station_id, t.area_id as t_area_id, 
+    t.user_id as t_user_id, t.source as t_source, t.construction as t_construction, t.support_order as t_support_order, 
+    t.match_cars as t_match_cars, t.telephone as t_telephone, t.service_phone as t_service_phone, 
+    t.provider_id as t_provider_id, t.provider as t_provider, t.pay_way as t_pay_way, 
+    t.pay_tip as t_pay_tip, t.electricity_price as t_electricity_price, t.fast_num as t_fast_num, 
+    t.slow_num as t_slow_num, t.times as t_times, t.is_underground as t_is_underground, 
+    t.is_standard as t_is_standard, t.is_private as t_is_private, t.lat as t_lat, t.lng as t_lng, 
+    t.title as t_title, t.address as t_address, t.site_guide as t_site_guide, t.open_time as t_open_time, 
+    t.parking_price as t_parking_price, t.park_nums as t_park_nums, t.park_info as t_park_info, 
+    t.head_img as t_head_img, t.detail_imgs as t_detail_imgs, t.service_fee as t_service_fee, 
+    t.remark as t_remark, t.state as t_state, t.create_time as t_create_time, t.update_time as t_update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from charging_station t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+  </select>
+  <!-- 查询充电桩 -->
+  <select id="queryChargingStations" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" />,round(6378.138*2*asin(sqrt(pow(sin((#{param.lat}*pi()/180-lat*pi()/180)/2),2)+cos(#{param.lat}*pi()/180)*cos(lat*pi()/180)
+  			*pow(sin((#{param.lng}*pi()/180-lng*pi()/180)/2),2)))*1000) as distance from charging_station t
+  	<trim prefix="where" prefixOverrides="and">
+  		<if test="null!=param.nearby">
+  			and round(6378.138*2*asin(sqrt(pow(sin((#{param.lat}*pi()/180-lat*pi()/180)/2),2)+cos(#{param.lat}*pi()/180)*cos(lat*pi()/180)
+  			*pow(sin((#{param.lng}*pi()/180-lng*pi()/180)/2),2)))*1000)&lt;=#{param.nearby}
+  		</if>
+  		<if test="null!=param.state">
+  			and t.state=#{param.state}
+  		</if>
+  		<if test="null!=param.source">
+  			and t.source=#{param.source}
+  		</if>
+  		<if test="null!=param.userStation">
+	  		<choose>
+	  			<when test="param.userStation">
+	  				and t.user_id&gt;0
+	  			</when>
+	  			<otherwise>
+	  				and t.user_id=0
+	  			</otherwise>
+	  		</choose>
+  		</if>
+  	</trim>
+  	<if test="null!=param.nearby">
+  		order by distance,id
+  	</if>
+    <if test="param.limit!=null and param.limit>0">
+		limit #{param.offset},#{param.limit}
+	</if>
+  </select>
+  <!-- 统计快慢数量 -->
+  <select id="statFastSlowAmount" resultType="java.util.Map">
+  	select coalesce(sum(t.slow_num),0) as slowNum,coalesce(sum(t.fast_num),0) as fastNum from charging_station t
+  	<trim prefix="where" prefixOverrides="and">
+  	<if test="null!=param.providerId">
+		and t.provider_id=#{param.providerId}
+	</if>
+	<if test="null!=param.areaId">
+		and t.area_id=#{param.areaId}
+	</if>
+  	</trim>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.charging.pojo.ChargingStation" useGeneratedKeys="true" keyProperty="id">
+    insert into charging_station
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="stationId != null">
+        station_id,
+      </if>
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="construction != null">
+        construction,
+      </if>
+      <if test="supportOrder != null">
+        support_order,
+      </if>
+      <if test="matchCars != null">
+        match_cars,
+      </if>
+      <if test="telephone != null">
+        telephone,
+      </if>
+      <if test="servicePhone != null">
+        service_phone,
+      </if>
+      <if test="providerId != null">
+        provider_id,
+      </if>
+      <if test="provider != null">
+        provider,
+      </if>
+      <if test="payWay != null">
+        pay_way,
+      </if>
+      <if test="payTip != null">
+        pay_tip,
+      </if>
+      <if test="electricityPrice != null">
+        electricity_price,
+      </if>
+      <if test="fastNum != null">
+        fast_num,
+      </if>
+      <if test="slowNum != null">
+        slow_num,
+      </if>
+      <if test="times != null">
+        times,
+      </if>
+      <if test="isUnderground != null">
+        is_underground,
+      </if>
+      <if test="isStandard != null">
+        is_standard,
+      </if>
+      <if test="isPrivate != null">
+        is_private,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+      <if test="lng != null">
+        lng,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="siteGuide != null">
+        site_guide,
+      </if>
+      <if test="openTime != null">
+        open_time,
+      </if>
+      <if test="parkingPrice != null">
+        parking_price,
+      </if>
+      <if test="parkNums != null">
+        park_nums,
+      </if>
+      <if test="parkInfo != null">
+        park_info,
+      </if>
+      <if test="headImg != null">
+        head_img,
+      </if>
+      <if test="detailImgs != null">
+        detail_imgs,
+      </if>
+      <if test="serviceFee != null">
+        service_fee,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="stationId != null">
+        #{stationId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="construction != null">
+        #{construction,jdbcType=INTEGER},
+      </if>
+      <if test="supportOrder != null">
+        #{supportOrder,jdbcType=INTEGER},
+      </if>
+      <if test="matchCars != null">
+        #{matchCars,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="servicePhone != null">
+        #{servicePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="providerId != null">
+        #{providerId,jdbcType=VARCHAR},
+      </if>
+      <if test="provider != null">
+        #{provider,jdbcType=VARCHAR},
+      </if>
+      <if test="payWay != null">
+        #{payWay,jdbcType=VARCHAR},
+      </if>
+      <if test="payTip != null">
+        #{payTip,jdbcType=VARCHAR},
+      </if>
+      <if test="electricityPrice != null">
+        #{electricityPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="fastNum != null">
+        #{fastNum,jdbcType=INTEGER},
+      </if>
+      <if test="slowNum != null">
+        #{slowNum,jdbcType=INTEGER},
+      </if>
+      <if test="times != null">
+        #{times,jdbcType=INTEGER},
+      </if>
+      <if test="isUnderground != null">
+        #{isUnderground,jdbcType=INTEGER},
+      </if>
+      <if test="isStandard != null">
+        #{isStandard,jdbcType=INTEGER},
+      </if>
+      <if test="isPrivate != null">
+        #{isPrivate,jdbcType=INTEGER},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=DECIMAL},
+      </if>
+      <if test="lng != null">
+        #{lng,jdbcType=DECIMAL},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="siteGuide != null">
+        #{siteGuide,jdbcType=VARCHAR},
+      </if>
+      <if test="openTime != null">
+        #{openTime,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingPrice != null">
+        #{parkingPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="parkNums != null">
+        #{parkNums,jdbcType=INTEGER},
+      </if>
+      <if test="parkInfo != null">
+        #{parkInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="headImg != null">
+        #{headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="detailImgs != null">
+        #{detailImgs,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceFee != null">
+        #{serviceFee,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from charging_station t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update charging_station t
+    <set>
+      <if test="record.uuid != null">
+        t.uuid = #{record.uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stationId != null">
+        t.station_id = #{record.stationId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaId != null">
+        t.area_id = #{record.areaId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null">
+        t.user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.source != null">
+        t.source = #{record.source,jdbcType=INTEGER},
+      </if>
+      <if test="record.construction != null">
+        t.construction = #{record.construction,jdbcType=INTEGER},
+      </if>
+      <if test="record.supportOrder != null">
+        t.support_order = #{record.supportOrder,jdbcType=INTEGER},
+      </if>
+      <if test="record.matchCars != null">
+        t.match_cars = #{record.matchCars,jdbcType=VARCHAR},
+      </if>
+      <if test="record.telephone != null">
+        t.telephone = #{record.telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.servicePhone != null">
+        t.service_phone = #{record.servicePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.providerId != null">
+        t.provider_id = #{record.providerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.provider != null">
+        t.provider = #{record.provider,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payWay != null">
+        t.pay_way = #{record.payWay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payTip != null">
+        t.pay_tip = #{record.payTip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.electricityPrice != null">
+        t.electricity_price = #{record.electricityPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fastNum != null">
+        t.fast_num = #{record.fastNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.slowNum != null">
+        t.slow_num = #{record.slowNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.times != null">
+        t.times = #{record.times,jdbcType=INTEGER},
+      </if>
+      <if test="record.isUnderground != null">
+        t.is_underground = #{record.isUnderground,jdbcType=INTEGER},
+      </if>
+      <if test="record.isStandard != null">
+        t.is_standard = #{record.isStandard,jdbcType=INTEGER},
+      </if>
+      <if test="record.isPrivate != null">
+        t.is_private = #{record.isPrivate,jdbcType=INTEGER},
+      </if>
+      <if test="record.lat != null">
+        t.lat = #{record.lat,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lng != null">
+        t.lng = #{record.lng,jdbcType=DECIMAL},
+      </if>
+      <if test="record.title != null">
+        t.title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        t.address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.siteGuide != null">
+        t.site_guide = #{record.siteGuide,jdbcType=VARCHAR},
+      </if>
+      <if test="record.openTime != null">
+        t.open_time = #{record.openTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkingPrice != null">
+        t.parking_price = #{record.parkingPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkNums != null">
+        t.park_nums = #{record.parkNums,jdbcType=INTEGER},
+      </if>
+      <if test="record.parkInfo != null">
+        t.park_info = #{record.parkInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.headImg != null">
+        t.head_img = #{record.headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detailImgs != null">
+        t.detail_imgs = #{record.detailImgs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceFee != null">
+        t.service_fee = #{record.serviceFee,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        t.remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        t.state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        t.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.user.mapper.UserChargingMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.user.pojo.UserCharging">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_user_id" jdbcType="INTEGER" property="userId" />
+    <result column="t_charging_id" jdbcType="INTEGER" property="chargingId" />
+    <result column="t_remark" jdbcType="VARCHAR" property="remark" />
+    <result column="t_state" jdbcType="INTEGER" property="state" />
+    <result column="t_follow_time" jdbcType="TIMESTAMP" property="followTime" />
+    <result column="t_cancel_time" jdbcType="TIMESTAMP" property="cancelTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.user_id as t_user_id, t.charging_id as t_charging_id, t.remark as t_remark, 
+    t.state as t_state, t.follow_time as t_follow_time, t.cancel_time as t_cancel_time
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user_charging t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.user.pojo.UserCharging" useGeneratedKeys="true" keyProperty="id">
+    insert into user_charging
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="chargingId != null">
+        charging_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="followTime != null">
+        follow_time,
+      </if>
+      <if test="cancelTime != null">
+        cancel_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="chargingId != null">
+        #{chargingId,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="followTime != null">
+        #{followTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cancelTime != null">
+        #{cancelTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from user_charging t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update user_charging t
+    <set>
+      <if test="record.userId != null">
+        t.user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.chargingId != null">
+        t.charging_id = #{record.chargingId,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        t.remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        t.state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.followTime != null">
+        t.follow_time = #{record.followTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cancelTime != null">
+        t.cancel_time = #{record.cancelTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

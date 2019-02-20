@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.recharge.mapper.RechargeTemplateMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.recharge.pojo.RechargeTemplate">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_title" jdbcType="VARCHAR" property="title" />
+    <result column="t_price" jdbcType="REAL" property="price" />
+    <result column="t_bonus" jdbcType="REAL" property="bonus" />
+    <result column="t_head_img" jdbcType="VARCHAR" property="headImg" />
+    <result column="t_sort" jdbcType="INTEGER" property="sort" />
+    <result column="t_state" jdbcType="INTEGER" property="state" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id,t.title as t_title, t.price as t_price, t.bonus as t_bonus, t.head_img as t_head_img, t.sort as t_sort, 
+    t.state as t_state, t.create_time as t_create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from recharge_template t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+	<if test="lock!=null and lock">
+		for update
+	</if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.recharge.pojo.RechargeTemplate" useGeneratedKeys="true" keyProperty="id">
+    insert into recharge_template
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        title,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="bonus != null">
+        bonus,
+      </if>
+      <if test="headImg != null">
+        head_img,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=REAL},
+      </if>
+      <if test="bonus != null">
+        #{bonus,jdbcType=REAL},
+      </if>
+      <if test="headImg != null">
+        #{headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from recharge_template t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update recharge_template t
+    <set>
+      <if test="record.title != null">
+        t.title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        t.price = #{record.price,jdbcType=REAL},
+      </if>
+      <if test="record.bonus != null">
+        t.bonus = #{record.bonus,jdbcType=REAL},
+      </if>
+      <if test="record.headImg != null">
+        t.head_img = #{record.headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sort != null">
+        t.sort = #{record.sort,jdbcType=INTEGER},
+      </if>
+      <if test="record.state != null">
+        t.state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

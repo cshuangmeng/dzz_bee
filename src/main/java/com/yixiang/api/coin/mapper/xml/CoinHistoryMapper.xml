@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.coin.mapper.CoinHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.coin.pojo.CoinHistory">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_user_id" jdbcType="INTEGER" property="userId" />
+    <result column="t_trade_id" jdbcType="INTEGER" property="tradeId" />
+    <result column="t_title" jdbcType="VARCHAR" property="title" />
+    <result column="t_trade_type" jdbcType="INTEGER" property="tradeType" />
+    <result column="t_amount" jdbcType="INTEGER" property="amount" />
+    <result column="t_balance" jdbcType="INTEGER" property="balance" />
+    <result column="t_remark" jdbcType="VARCHAR" property="remark" />
+    <result column="t_state" jdbcType="INTEGER" property="state" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.user_id as t_user_id, t.trade_id as t_trade_id, t.title as t_title, t.trade_type as t_trade_type, 
+    t.amount as t_amount, t.remark as t_remark, t.state as t_state, t.create_time as t_create_time, 
+    t.balance as t_balance
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from coin_history t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.coin.pojo.CoinHistory" useGeneratedKeys="true" keyProperty="id">
+    insert into coin_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="tradeId != null">
+        trade_id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="tradeType != null">
+        trade_type,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="balance != null">
+        balance,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="tradeId != null">
+        #{tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeType != null">
+        #{tradeType,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null">
+        #{balance,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from coin_history t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update coin_history t
+    <set>
+      <if test="record.userId != null">
+        t.user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tradeId != null">
+        t.trade_id = #{record.tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null">
+        t.title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tradeType != null">
+        t.trade_type = #{record.tradeType,jdbcType=INTEGER},
+      </if>
+      <if test="record.amount != null">
+        t.amount = #{record.amount,jdbcType=INTEGER},
+      </if>
+      <if test="record.balance != null">
+        t.balance = #{record.balance,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        t.remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        t.state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

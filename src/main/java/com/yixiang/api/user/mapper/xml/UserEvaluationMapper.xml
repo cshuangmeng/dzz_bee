@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.user.mapper.UserEvaluationMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.user.pojo.UserEvaluation">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_from_user_id" jdbcType="INTEGER" property="fromUserId" />
+    <result column="t_to_user_id" jdbcType="INTEGER" property="toUserId" />
+    <result column="t_stars" jdbcType="INTEGER" property="stars" />
+    <result column="t_title" jdbcType="VARCHAR" property="title" />
+    <result column="t_content" jdbcType="VARCHAR" property="content" />
+    <result column="t_imgs" jdbcType="VARCHAR" property="imgs" />
+    <result column="t_state" jdbcType="INTEGER" property="state" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.from_user_id as t_from_user_id, t.to_user_id as t_to_user_id, t.stars as t_stars, 
+    t.title as t_title, t.content as t_content, t.imgs as t_imgs, t.state as t_state, 
+    t.create_time as t_create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user_evaluation t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.user.pojo.UserEvaluation" useGeneratedKeys="true" keyProperty="id">
+    insert into user_evaluation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fromUserId != null">
+        from_user_id,
+      </if>
+      <if test="toUserId != null">
+        to_user_id,
+      </if>
+      <if test="stars != null">
+        stars,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="imgs != null">
+        imgs,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fromUserId != null">
+        #{fromUserId,jdbcType=INTEGER},
+      </if>
+      <if test="toUserId != null">
+        #{toUserId,jdbcType=INTEGER},
+      </if>
+      <if test="stars != null">
+        #{stars,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="imgs != null">
+        #{imgs,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from user_evaluation t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update user_evaluation t
+    <set>
+      <if test="record.fromUserId != null">
+        t.from_user_id = #{record.fromUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.toUserId != null">
+        t.to_user_id = #{record.toUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.stars != null">
+        t.stars = #{record.stars,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null">
+        t.title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null">
+        t.content = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imgs != null">
+        t.imgs = #{record.imgs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        t.state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

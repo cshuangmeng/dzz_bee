@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.user.mapper.MessageHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.user.pojo.MessageHistory">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_user_id" jdbcType="INTEGER" property="userId" />
+    <result column="t_ref_id" jdbcType="INTEGER" property="refId" />
+    <result column="t_top_id" jdbcType="INTEGER" property="topId" />
+    <result column="t_content_type" jdbcType="INTEGER" property="contentType" />
+    <result column="t_content" jdbcType="VARCHAR" property="content" />
+    <result column="t_media" jdbcType="VARCHAR" property="media" />
+    <result column="t_is_read" jdbcType="INTEGER" property="isRead" />
+    <result column="t_source" jdbcType="INTEGER" property="source" />
+    <result column="t_state" jdbcType="INTEGER" property="state" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.user_id as t_user_id, t.ref_id as t_ref_id, t.top_id as t_top_id, 
+    t.content_type as t_content_type, t.content as t_content, t.media as t_media, t.is_read as t_is_read, 
+    t.source as t_source, t.state as t_state, t.create_time as t_create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from message_history t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.user.pojo.MessageHistory" useGeneratedKeys="true" keyProperty="id">
+    insert into message_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="refId != null">
+        ref_id,
+      </if>
+      <if test="topId != null">
+        top_id,
+      </if>
+      <if test="contentType != null">
+        content_type,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="media != null">
+        media,
+      </if>
+      <if test="isRead != null">
+        is_read,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="refId != null">
+        #{refId,jdbcType=INTEGER},
+      </if>
+      <if test="topId != null">
+        #{topId,jdbcType=INTEGER},
+      </if>
+      <if test="contentType != null">
+        #{contentType,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="media != null">
+        #{media,jdbcType=VARCHAR},
+      </if>
+      <if test="isRead != null">
+        #{isRead,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from message_history t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update message_history t
+    <set>
+      <if test="record.userId != null">
+        t.user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.refId != null">
+        t.ref_id = #{record.refId,jdbcType=INTEGER},
+      </if>
+      <if test="record.topId != null">
+        t.top_id = #{record.topId,jdbcType=INTEGER},
+      </if>
+      <if test="record.contentType != null">
+        t.content_type = #{record.contentType,jdbcType=INTEGER},
+      </if>
+      <if test="record.content != null">
+        t.content = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.media != null">
+        t.media = #{record.media,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isRead != null">
+        t.is_read = #{record.isRead,jdbcType=INTEGER},
+      </if>
+      <if test="record.source != null">
+        t.source = #{record.source,jdbcType=INTEGER},
+      </if>
+      <if test="record.state != null">
+        t.state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

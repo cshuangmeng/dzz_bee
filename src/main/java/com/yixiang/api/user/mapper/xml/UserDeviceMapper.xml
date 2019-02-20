@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.user.mapper.UserDeviceMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.user.pojo.UserDevice">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_user_id" jdbcType="INTEGER" property="userId" />
+    <result column="t_wx_open_id" jdbcType="VARCHAR" property="wxOpenId" />
+    <result column="t_registration_id" jdbcType="VARCHAR" property="registrationId" />
+    <result column="t_imei" jdbcType="VARCHAR" property="imei" />
+    <result column="t_system" jdbcType="VARCHAR" property="system" />
+    <result column="t_platform" jdbcType="VARCHAR" property="platform" />
+    <result column="t_login_time" jdbcType="TIMESTAMP" property="loginTime" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.user_id as t_user_id, t.registration_id as t_registration_id, t.imei as t_imei, 
+    t.system as t_system, t.login_time as t_login_time, t.create_time as t_create_time,t.wx_open_id as t_wx_open_id,t.platform as t_platform
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user_device t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.user.pojo.UserDevice" useGeneratedKeys="true" keyProperty="id">
+    insert into user_device
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="wxOpenId != null">
+        wx_open_id,
+      </if>
+      <if test="registrationId != null">
+        registration_id,
+      </if>
+      <if test="imei != null">
+        imei,
+      </if>
+      <if test="system != null">
+        system,
+      </if>
+      <if test="platform != null">
+        platform,
+      </if>
+      <if test="loginTime != null">
+        login_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="wxOpenId != null">
+        #{wxOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="registrationId != null">
+        #{registrationId,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null">
+        #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="system != null">
+        #{system,jdbcType=VARCHAR},
+      </if>
+      <if test="platform != null">
+        #{platform,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null">
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from user_device t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update user_device t
+    <set>
+      <if test="record.userId != null">
+        t.user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.wxOpenId != null">
+        t.wx_open_id = #{record.wxOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registrationId != null">
+        t.registration_id = #{record.registrationId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imei != null">
+        t.imei = #{record.imei,jdbcType=VARCHAR},
+      </if>
+      <if test="record.system != null">
+        t.system = #{record.system,jdbcType=VARCHAR},
+      </if>
+      <if test="record.platform != null">
+        t.platform = #{record.platform,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loginTime != null">
+        t.login_time = #{record.loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

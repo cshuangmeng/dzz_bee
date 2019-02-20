@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.stat.mapper.OpenAppLogMapper">
+	<!-- 查询条件 -->
+	<sql id="statCondition">
+		<trim prefix="where" prefixOverrides="and">
+			<if test="null!=param.startDate">
+				and create_time&gt;=#{param.startDate}
+			</if>
+			<if test="null!=param.endDate">
+				and create_time&lt;#{param.endDate}
+			</if>
+		</trim>
+	</sql>
+	<!-- 按天统计打开APP次数 -->
+	<select id="statOpenAppAmountWithDate" resultType="java.util.Map">
+		select
+		<choose>
+			<when test="null!=param.groupBy and ''!=param.groupBy">
+				${param.groupBy}
+			</when>
+			<otherwise>
+				date_format(create_time,'%Y-%m-%d')
+			</otherwise>
+		</choose>
+		as ot,count(ip) as pv,count(distinct ip) as uv from open_app_log
+		<include refid="statCondition"/>
+		group by ot order by ot
+	</select>
+	<!-- 统计打开APP次数 -->
+	<select id="statOpenAppAmount" resultType="java.util.Map">
+		select count(ip) as pv,count(distinct ip) as uv from open_app_log
+		<include refid="statCondition"/>
+	</select>
+</mapper>

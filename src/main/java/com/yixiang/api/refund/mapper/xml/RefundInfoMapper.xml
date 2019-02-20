@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.refund.mapper.RefundInfoMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.refund.pojo.RefundInfo">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_user_id" jdbcType="INTEGER" property="userId" />
+    <result column="t_order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="t_order_type" jdbcType="INTEGER" property="orderType" />
+    <result column="t_trade_history_id" jdbcType="INTEGER" property="tradeHistoryId" />
+    <result column="t_total_price" jdbcType="REAL" property="totalPrice" />
+    <result column="t_third_price" jdbcType="REAL" property="thirdPrice" />
+    <result column="t_balance_price" jdbcType="REAL" property="balancePrice" />
+    <result column="t_pay_way" jdbcType="INTEGER" property="payWay" />
+    <result column="t_out_trade_no" jdbcType="VARCHAR" property="outTradeNo" />
+    <result column="t_trade_no" jdbcType="VARCHAR" property="tradeNo" />
+    <result column="t_state" jdbcType="INTEGER" property="state" />
+    <result column="t_reason" jdbcType="VARCHAR" property="reason" />
+    <result column="t_response" jdbcType="VARCHAR" property="response" />
+    <result column="t_remark" jdbcType="VARCHAR" property="remark" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="t_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.user_id as t_user_id, t.order_id as t_order_id, t.order_type as t_order_type, 
+    t.trade_history_id as t_trade_history_id, t.total_price as t_total_price, 
+    t.third_price as t_third_price, t.balance_price as t_balance_price, t.pay_way as t_pay_way, 
+    t.out_trade_no as t_out_trade_no, t.trade_no as t_trade_no, t.state as t_state, t.reason as t_reason, 
+    t.create_time as t_create_time, t.update_time as t_update_time, t.response as t_response, t.remark as t_remark
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from refund_info t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+	<if test="lock!=null and lock">
+		for update
+	</if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.refund.pojo.RefundInfo" useGeneratedKeys="true" keyProperty="id">
+    insert into refund_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="orderType != null">
+        order_type,
+      </if>
+      <if test="tradeHistoryId != null">
+        trade_history_id,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
+      </if>
+      <if test="thirdPrice != null">
+        third_price,
+      </if>
+      <if test="balancePrice != null">
+        balance_price,
+      </if>
+      <if test="payWay != null">
+        pay_way,
+      </if>
+      <if test="outTradeNo != null">
+        out_trade_no,
+      </if>
+      <if test="tradeNo != null">
+        trade_no,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="response != null">
+        response,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderType != null">
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="tradeHistoryId != null">
+        #{tradeHistoryId,jdbcType=INTEGER},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=REAL},
+      </if>
+      <if test="thirdPrice != null">
+        #{thirdPrice,jdbcType=REAL},
+      </if>
+      <if test="balancePrice != null">
+        #{balancePrice,jdbcType=REAL},
+      </if>
+      <if test="payWay != null">
+        #{payWay,jdbcType=INTEGER},
+      </if>
+      <if test="outTradeNo != null">
+        #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNo != null">
+        #{tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="response != null">
+        #{response,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from refund_info t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update refund_info t
+    <set>
+      <if test="record.userId != null">
+        t.user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderId != null">
+        t.order_id = #{record.orderId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderType != null">
+        t.order_type = #{record.orderType,jdbcType=INTEGER},
+      </if>
+      <if test="record.tradeHistoryId != null">
+        t.trade_history_id = #{record.tradeHistoryId,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalPrice != null">
+        t.total_price = #{record.totalPrice,jdbcType=REAL},
+      </if>
+      <if test="record.thirdPrice != null">
+        t.third_price = #{record.thirdPrice,jdbcType=REAL},
+      </if>
+      <if test="record.balancePrice != null">
+        t.balance_price = #{record.balancePrice,jdbcType=REAL},
+      </if>
+      <if test="record.payWay != null">
+        t.pay_way = #{record.payWay,jdbcType=INTEGER},
+      </if>
+      <if test="record.outTradeNo != null">
+        t.out_trade_no = #{record.outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tradeNo != null">
+        t.trade_no = #{record.tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        t.state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.reason != null">
+        t.reason = #{record.reason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.response != null">
+        t.response = #{record.response,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        t.remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        t.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.brand.mapper.BrandInfoMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.brand.pojo.BrandInfo">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_first_word" jdbcType="VARCHAR" property="firstWord" />
+    <result column="t_brand" jdbcType="VARCHAR" property="brand" />
+    <result column="t_icon" jdbcType="VARCHAR" property="icon" />
+    <result column="t_is_hot" jdbcType="INTEGER" property="isHot" />
+    <result column="t_sort" jdbcType="INTEGER" property="sort" />
+    <result column="t_state" jdbcType="INTEGER" property="state" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.first_word as t_first_word, t.brand as t_brand, t.icon as t_icon, t.is_hot as t_is_hot, t.sort as t_sort, t.state as t_state, 
+    t.create_time as t_create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from brand_info t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.brand.pojo.BrandInfo" useGeneratedKeys="true" keyProperty="id">
+    insert into brand_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="brand != null">
+        brand,
+      </if>
+      <if test="firstWord != null">
+        first_word,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="isHot != null">
+        is_hot,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="brand != null">
+        #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="firstWord != null">
+        #{firstWord,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="isHot != null">
+        #{isHot,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from brand_info t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update brand_info t
+    <set>
+      <if test="record.brand != null">
+        t.brand = #{record.brand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.firstWord != null">
+        t.first_word = #{record.firstWord,jdbcType=VARCHAR},
+      </if>
+      <if test="record.icon != null">
+        t.icon = #{record.icon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isHot != null">
+        t.is_hot = #{record.isHot,jdbcType=INTEGER},
+      </if>
+      <if test="record.sort != null">
+        t.sort = #{record.sort,jdbcType=INTEGER},
+      </if>
+      <if test="record.state != null">
+        t.state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

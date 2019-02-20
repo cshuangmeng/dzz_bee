@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.stat.mapper.ShareLogMapper">
+	<!-- 查询条件 -->
+	<sql id="statCondition">
+		<trim prefix="where" prefixOverrides="and">
+			<if test="null!=param.startDate">
+				and t.create_time&gt;=#{param.startDate}
+			</if>
+			<if test="null!=param.endDate">
+				and t.create_time&lt;#{param.endDate}
+			</if>
+			<if test="null!=param.category">
+				and t.category=#{param.category}
+			</if>
+			<if test="null!=param.relateId">
+				and t.relate_id=#{param.relateId}
+			</if>
+		</trim>
+	</sql>
+	<!-- 按天统计分享次数 -->
+	<select id="statShareAmountWithDate" resultType="java.util.Map">
+		select
+		<choose>
+			<when test="null!=param.groupBy and ''!=param.groupBy">
+				${param.groupBy}
+			</when>
+			<otherwise>
+				date_format(t.create_time,'%Y-%m-%d')
+			</otherwise>
+		</choose>
+		as ot,count(case when t.category=1 then t.ip end) as station,
+		count(case when t.category=2 then t.ip end) as article,count(case when t.category=3 and t1.source=1 then t.ip end) as newCar,
+		count(case when t.category=3 and t1.source=2 then t.ip end) as oldCar from share_log t
+		left join brand_car t1 on (t.relate_id=t1.id)
+		<include refid="statCondition"/>
+		group by ot order by ot
+	</select>
+	<!-- 统计分享次数 -->
+	<select id="statShareAmount" resultType="java.util.Map">
+		select count(case when t.category=1 then t.ip end) as station,
+		count(case when t.category=2 then t.ip end) as article,count(case when t.category=3 and t1.source=1 then t.ip end) as newCar,
+		count(case when t.category=3 and t1.source=2 then t.ip end) as oldCar from share_log t
+		left join brand_car t1 on (t.relate_id=t1.id)
+		<include refid="statCondition"/>
+	</select>
+</mapper>

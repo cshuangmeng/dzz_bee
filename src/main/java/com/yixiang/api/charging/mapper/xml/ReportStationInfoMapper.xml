@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.charging.mapper.ReportStationInfoMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.charging.pojo.ReportStationInfo">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_user_id" jdbcType="INTEGER" property="userId" />
+    <result column="t_order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="t_station_id" jdbcType="INTEGER" property="stationId" />
+    <result column="t_tags" jdbcType="VARCHAR" property="tags" />
+    <result column="t_lat" jdbcType="DECIMAL" property="lat" />
+    <result column="t_lng" jdbcType="DECIMAL" property="lng" />
+    <result column="t_content" jdbcType="VARCHAR" property="content" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.user_id as t_user_id, t.order_id as t_order_id, t.station_id as t_station_id, 
+    t.tags as t_tags, t.lat as t_lat, t.lng as t_lng, t.content as t_content, t.create_time as t_create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from report_station_info t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+	<if test="lock!=null and lock">
+		for update
+	</if>
+  </select>
+  <!-- 按天统计充电在故障率 -->
+  <select id="statStationReport" resultType="java.util.Map">
+  	select date_format(t.create_time,'%Y-%m-%d') as ot,count(t.id) as amount from report_station_info t 
+  	inner join order_info t1 on (t.order_id=t1.id) inner join charging_station t2 on (t1.station_id=t2.id) 
+  	<trim prefix="where" prefixOverrides="and">
+  	<if test="null!=param.startDate">
+		and t.create_time&gt;=#{param.startDate}
+	</if>
+	<if test="null!=param.endDate">
+		and t.create_time&lt;#{param.endDate}
+	</if>
+	<if test="null!=param.providerId">
+		and t2.provider_id=#{param.providerId}
+	</if>
+	<if test="null!=param.areaId">
+		and t2.area_id=#{param.areaId}
+	</if>
+	<if test="null!=param.connectorType">
+		and exists(select '' from connector_info where id=t1.connector_id and connector_type=#{param.connectorType})
+	</if>
+  	</trim>
+  	group by ot
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.charging.pojo.ReportStationInfo" useGeneratedKeys="true" keyProperty="id">
+    insert into report_station_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="stationId != null">
+        station_id,
+      </if>
+      <if test="tags != null">
+        tags,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+      <if test="lng != null">
+        lng,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="stationId != null">
+        #{stationId,jdbcType=INTEGER},
+      </if>
+      <if test="tags != null">
+        #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=DECIMAL},
+      </if>
+      <if test="lng != null">
+        #{lng,jdbcType=DECIMAL},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from report_station_info t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update report_station_info t
+    <set>
+      <if test="record.userId != null">
+        t.user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderId != null">
+        t.order_id = #{record.orderId,jdbcType=INTEGER},
+      </if>
+      <if test="record.stationId != null">
+        t.station_id = #{record.stationId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tags != null">
+        t.tags = #{record.tags,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lat != null">
+        t.lat = #{record.lat,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lng != null">
+        t.lng = #{record.lng,jdbcType=DECIMAL},
+      </if>
+      <if test="record.content != null">
+        t.content = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.brand.mapper.BrandCarMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.brand.pojo.BrandCar">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_sid" jdbcType="VARCHAR" property="sid" />
+    <result column="t_car_type" jdbcType="INTEGER" property="carType" />
+    <result column="t_source" jdbcType="INTEGER" property="source" />
+    <result column="t_fuel_type" jdbcType="INTEGER" property="fuelType" />
+    <result column="t_brand_id" jdbcType="INTEGER" property="brandId" />
+    <result column="t_area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="t_address" jdbcType="VARCHAR" property="address" />
+    <result column="t_category" jdbcType="VARCHAR" property="category" />
+    <result column="t_color" jdbcType="VARCHAR" property="color" />
+    <result column="t_car" jdbcType="VARCHAR" property="car" />
+    <result column="t_price" jdbcType="VARCHAR" property="price" />
+    <result column="t_group_price" jdbcType="VARCHAR" property="groupPrice" />
+    <result column="t_shop_price" jdbcType="VARCHAR" property="shopPrice" />
+    <result column="t_battery_life" jdbcType="VARCHAR" property="batteryLife" />
+    <result column="t_icon" jdbcType="VARCHAR" property="icon" />
+    <result column="t_banner" jdbcType="VARCHAR" property="banner" />
+    <result column="t_detail_imgs" jdbcType="VARCHAR" property="detailImgs" />
+    <result column="t_param_imgs" jdbcType="VARCHAR" property="paramImgs" />
+    <result column="t_is_special" jdbcType="INTEGER" property="isSpecial" />
+    <result column="t_sort" jdbcType="INTEGER" property="sort" />
+    <result column="t_state" jdbcType="INTEGER" property="state" />
+    <result column="t_label" jdbcType="INTEGER" property="label" />
+    <result column="t_remark" jdbcType="VARCHAR" property="remark" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="t_top_time" jdbcType="TIMESTAMP" property="topTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.sid as t_sid, t.car_type as t_car_type, t.source as t_source, t.fuel_type as t_fuel_type, 
+    t.brand_id as t_brand_id, t.category as t_category, t.color as t_color, t.car as t_car, 
+    t.price as t_price, t.group_price as t_group_price, t.battery_life as t_battery_life, 
+    t.icon as t_icon, t.banner as t_banner, t.detail_imgs as t_detail_imgs, t.param_imgs as t_param_imgs, 
+    t.is_special as t_is_special, t.sort as t_sort, t.state as t_state, t.label as t_label, 
+    t.create_time as t_create_time,t.area_id as t_area_id,t.address as t_address,
+    t.shop_price as t_shop_price,t.remark as t_remark,t.top_time as t_top_time
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from brand_car t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.brand.pojo.BrandCar" useGeneratedKeys="true" keyProperty="id">
+    insert into brand_car
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sid != null">
+        sid,
+      </if>
+      <if test="carType != null">
+        car_type,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="fuelType != null">
+        fuel_type,
+      </if>
+      <if test="brandId != null">
+        brand_id,
+      </if>
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="category != null">
+        category,
+      </if>
+      <if test="color != null">
+        color,
+      </if>
+      <if test="car != null">
+        car,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="groupPrice != null">
+        group_price,
+      </if>
+      <if test="shopPrice != null">
+        shop_price,
+      </if>
+      <if test="batteryLife != null">
+        battery_life,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="banner != null">
+        banner,
+      </if>
+      <if test="detailImgs != null">
+        detail_imgs,
+      </if>
+      <if test="paramImgs != null">
+        param_imgs,
+      </if>
+      <if test="isSpecial != null">
+        is_special,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="label != null">
+        label,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="topTime != null">
+        top_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sid != null">
+        #{sid,jdbcType=VARCHAR},
+      </if>
+      <if test="carType != null">
+        #{carType,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="fuelType != null">
+        #{fuelType,jdbcType=INTEGER},
+      </if>
+      <if test="brandId != null">
+        #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null">
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="car != null">
+        #{car,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="groupPrice != null">
+        #{groupPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="shopPrice != null">
+        #{shopPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="batteryLife != null">
+        #{batteryLife,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="banner != null">
+        #{banner,jdbcType=VARCHAR},
+      </if>
+      <if test="detailImgs != null">
+        #{detailImgs,jdbcType=VARCHAR},
+      </if>
+      <if test="paramImgs != null">
+        #{paramImgs,jdbcType=VARCHAR},
+      </if>
+      <if test="isSpecial != null">
+        #{isSpecial,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="label != null">
+        #{label,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="topTime != null">
+        #{topTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from brand_car t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update brand_car t
+    <set>
+      <if test="record.sid != null">
+        t.sid = #{record.sid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carType != null">
+        t.car_type = #{record.carType,jdbcType=INTEGER},
+      </if>
+      <if test="record.source != null">
+        t.source = #{record.source,jdbcType=INTEGER},
+      </if>
+      <if test="record.fuelType != null">
+        t.fuel_type = #{record.fuelType,jdbcType=INTEGER},
+      </if>
+      <if test="record.brandId != null">
+        t.brand_id = #{record.brandId,jdbcType=INTEGER},
+      </if>
+      <if test="record.areaId != null">
+        t.area_id = #{record.areaId,jdbcType=INTEGER},
+      </if>
+      <if test="record.address != null">
+        t.address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.category != null">
+        t.category = #{record.category,jdbcType=VARCHAR},
+      </if>
+      <if test="record.color != null">
+        t.color = #{record.color,jdbcType=VARCHAR},
+      </if>
+      <if test="record.car != null">
+        t.car = #{record.car,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        t.price = #{record.price,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupPrice != null">
+        t.group_price = #{record.groupPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopPrice != null">
+        t.shop_price = #{record.shopPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.batteryLife != null">
+        t.battery_life = #{record.batteryLife,jdbcType=VARCHAR},
+      </if>
+      <if test="record.icon != null">
+        t.icon = #{record.icon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.banner != null">
+        t.banner = #{record.banner,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detailImgs != null">
+        t.detail_imgs = #{record.detailImgs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paramImgs != null">
+        t.param_imgs = #{record.paramImgs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isSpecial != null">
+        t.is_special = #{record.isSpecial,jdbcType=INTEGER},
+      </if>
+      <if test="record.sort != null">
+        t.sort = #{record.sort,jdbcType=INTEGER},
+      </if>
+      <if test="record.state != null">
+        t.state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.label != null">
+        t.label = #{record.label,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        t.remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.topTime != null">
+        t.top_time = #{record.topTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <!-- 车辆销售数据 -->
+  <select id="statBrandCar" resultType="java.util.Map">
+  	select t.id,t.create_time createTime,t.car,t.car_type carType,t.price,t.shop_price shopPrice,t.group_price groupPrice,coalesce(t1.pv,0) sharePV,coalesce(t1.uv,0) shareUV
+  	,coalesce(t2.pv,0) browsePV,coalesce(t2.uv,0) browseUV,coalesce(t3.pv,0) appointPV from brand_car t 
+  	left join (select relate_id,count(distinct ip) uv,count(ip) pv from share_log where category=3 group by relate_id) t1 on (t.id=t1.relate_id) 
+  	left join (select relate_id,count(distinct ip) uv,count(ip) pv from browse_log where category=3 group by relate_id) t2 on (t.id=t2.relate_id) 
+  	left join (select car_id,count(id) pv from appointment_info group by car_id) t3 on (t.id=t3.car_id)
+  	<trim prefix="where" prefixOverrides="and">
+  		<if test="null!=param.brandId">
+  			and t.brand_id=#{param.brandId}
+  		</if>
+  		<if test="null!=param.areaId">
+  			and t.area_id=#{param.areaId}
+  		</if>
+  		<if test="null!=param.source">
+  			and t.source=#{param.source}
+  		</if>
+  		<if test="null!=param.startDate">
+  			and t.create_time&gt;=#{param.startDate}
+  		</if>
+  		<if test="null!=param.endDate">
+  			and t.create_time&lt;=#{param.endDate}
+  		</if>
+  		<if test="null!=param.states and param.states.size()>0">
+  			and t.state in
+  			<foreach collection="param.states" item="state" open="(" separator="," close=")">
+  			#{state}
+  			</foreach>
+  		</if>
+  	</trim>
+  	order by t.create_time desc
+  	<if test="null!=param.limit and param.limit>0">
+  		limit #{param.offset},#{param.limit}
+  	</if>
+  </select>
+</mapper>

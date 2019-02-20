@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.api.article.mapper.ArticleInfoMapper">
+  <resultMap id="BaseResultMap" type="com.yixiang.api.article.pojo.ArticleInfo">
+    <result column="t_id" jdbcType="INTEGER" property="id" />
+    <result column="t_user_id" jdbcType="INTEGER" property="userId" />
+    <result column="t_car_id" jdbcType="INTEGER" property="carId" />
+    <result column="t_category" jdbcType="INTEGER" property="category" />
+    <result column="t_uuid" jdbcType="VARCHAR" property="uuid" />
+    <result column="t_icon" jdbcType="VARCHAR" property="icon" />
+    <result column="t_share_icon" jdbcType="VARCHAR" property="shareIcon" />
+    <result column="t_visitors" jdbcType="INTEGER" property="visitors" />
+    <result column="t_comments" jdbcType="INTEGER" property="comments" />
+    <result column="t_praises" jdbcType="INTEGER" property="praises" />
+    <result column="t_title" jdbcType="VARCHAR" property="title" />
+    <result column="t_content" jdbcType="VARCHAR" property="content" />
+    <result column="t_source" jdbcType="INTEGER" property="source" />
+    <result column="t_media" jdbcType="VARCHAR" property="media" />
+    <result column="t_remark" jdbcType="VARCHAR" property="remark" />
+    <result column="t_state" jdbcType="INTEGER" property="state" />
+    <result column="t_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="t_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="t_top_time" jdbcType="TIMESTAMP" property="topTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    t.id as t_id, t.user_id as t_user_id, t.car_id as t_car_id, t.uuid as t_uuid, t.icon as t_icon, t.visitors as t_visitors
+    , t.comments as t_comments, t.praises as t_praises, t.title as t_title, t.content as t_content, 
+    t.source as t_source, t.media as t_media, t.remark as t_remark, t.state as t_state, t.category as t_category,  
+    t.create_time as t_create_time, t.update_time as t_update_time, t.share_icon as t_share_icon,
+    t.top_time as t_top_time
+  </sql>
+  <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from article_info t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+    <if test="lock">
+      for update
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit!=null and limit>0">
+		limit #{offset},#{limit}
+	</if>
+  </select>
+  <!-- 加载品牌文章列表 -->
+  <select id="queryArticles" resultType="map">
+  	select t1.id carId,t1.car carName,t1.icon carIcon,t1.price carPrice,t.uuid,t.title,t2.user_name userName,t2.head_img headImg
+  	,t.icon,t.share_icon shareIcon,t.comments,t.praises,t.visitors,t.create_time createTime,t.category,t.title,t.content,t.source from article_info t 
+  	inner join brand_car t1 on (t.car_id=t1.id) left join user_info t2 on (t.user_id=t2.id) 
+  	<trim prefix="where" prefixOverrides="and">
+  		<if test="null!=param.brandId">
+  			and t1.brand_id=#{param.brandId}
+  		</if>
+  		<if test="null!=param.state">
+  			and t.state=#{param.state}
+  		</if>
+  		<if test="null!=param.category">
+  			and t.category=#{param.category}
+  		</if>
+  		<if test="null!=param.states">
+  			and t.state in 
+  			<foreach collection="param.states" item="state" open="(" separator="," close=")">
+  				#{state}
+  			</foreach>
+  		</if>
+  		<if test="null!=param.userId">
+  			and t.user_id=#{param.userId}
+  		</if>
+  	</trim>
+  	<choose>
+  		<when test="null!=param.orderBy">
+  			order by #{param.orderBy}
+  		</when>
+  		<otherwise>
+  			order by t.create_time desc
+  		</otherwise>
+  	</choose>
+  	<if test="null!=param.limit and param.limit>0">
+  		limit #{param.offset},#{param.limit}
+  	</if>
+  </select>
+  <!-- 统计文章访问情况 -->
+  <select id="statArticleBrowseData" resultType="java.util.Map">
+	select t.id,t.category,t.user_id userId,t.title,t.top_time as topTime,count(distinct t1.id) as commentPV,count(distinct t2.id) as praisePV
+	,count(distinct t3.id) as browsePV,count(distinct t3.ip) as browseUV,count(distinct t4.id) as sharePV,count(distinct t4.ip) as shareUV 
+	from article_info t left join article_comment t1 on (t.id=t1.article_id
+	<if test="null!=param.startDate">
+		and t1.create_time&gt;=#{param.startDate}
+	</if>
+	<if test="null!=param.endDate">
+		and t1.create_time&lt;#{param.endDate}
+	</if>
+	) left join article_praise t2 on (t.id=t2.article_id
+	<if test="null!=param.startDate">
+		and t2.praise_time&gt;=#{param.startDate}
+	</if>
+	<if test="null!=param.endDate">
+		and t2.praise_time&lt;#{param.endDate}
+	</if>
+	) 
+	left join browse_log t3 on (t.id=t3.relate_id and t3.category=2
+	<if test="null!=param.startDate">
+		and t3.create_time&gt;=#{param.startDate}
+	</if>
+	<if test="null!=param.endDate">
+		and t3.create_time&lt;#{param.endDate}
+	</if>
+	) 
+	left join share_log t4 on (t.id=t4.relate_id and t4.category=2
+	<if test="null!=param.startDate">
+		and t4.create_time&gt;=#{param.startDate}
+	</if>
+	<if test="null!=param.endDate">
+		and t4.create_time&lt;#{param.endDate}
+	</if>
+	)
+	<trim prefix="where" prefixOverrides="and">
+		<if test="null!=param.states and param.states.size()>0">
+			and t.state in
+			<foreach collection="param.states" item="state" open="(" separator="," close=")">
+				#{state}
+			</foreach>
+		</if>
+	</trim>
+	group by t.id order by commentPV desc
+	<if test="null!=param.limit and param.limit>0">
+  		limit #{param.offset},#{param.limit}
+  	</if>
+  </select>
+  <insert id="insertSelective" parameterType="com.yixiang.api.article.pojo.ArticleInfo" useGeneratedKeys="true" keyProperty="id">
+    insert into article_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="carId != null">
+        car_id,
+      </if>
+      <if test="category != null">
+        category,
+      </if>
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="shareIcon != null">
+        share_icon,
+      </if>
+      <if test="visitors != null">
+        visitors,
+      </if>
+      <if test="comments != null">
+        comments,
+      </if>
+      <if test="praises != null">
+        praises,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="media != null">
+        media,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="topTime != null">
+        top_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carId != null">
+        #{carId,jdbcType=INTEGER},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=INTEGER},
+      </if>
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="shareIcon != null">
+        #{shareIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="visitors != null">
+        #{visitors,jdbcType=INTEGER},
+      </if>
+      <if test="comments != null">
+        #{comments,jdbcType=INTEGER},
+      </if>
+      <if test="praises != null">
+        #{praises,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="media != null">
+        #{media,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="topTime != null">
+        #{topTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultType="java.lang.Long">
+    select count(1) from article_info t
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update article_info t
+    <set>
+      <if test="record.userId != null">
+        t.user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.carId != null">
+        t.car_id = #{record.carId,jdbcType=INTEGER},
+      </if>
+      <if test="record.category != null">
+        t.category = #{record.category,jdbcType=INTEGER},
+      </if>
+      <if test="record.uuid != null">
+        t.uuid = #{record.uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.icon != null">
+        t.icon = #{record.icon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shareIcon != null">
+        t.share_icon = #{record.shareIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.visitors != null">
+        t.visitors = #{record.visitors,jdbcType=INTEGER},
+      </if>
+      <if test="record.comments != null">
+        t.comments = #{record.comments,jdbcType=INTEGER},
+      </if>
+      <if test="record.praises != null">
+        t.praises = #{record.praises,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null">
+        t.title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null">
+        t.content = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.source != null">
+        t.source = #{record.source,jdbcType=INTEGER},
+      </if>
+      <if test="record.media != null">
+        t.media = #{record.media,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        t.remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        t.state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        t.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        t.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.topTime != null">
+        t.top_time = #{record.topTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="com.yixiang.api.util.mapper.UtilMapper.Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>
