@@ -6,6 +6,8 @@ public class RefundInfo {
 
 	private Integer id;
 	private Integer userId;
+	private Integer account;
+	private Integer source;
 	private Integer orderId;
 	private Integer orderType;
 	private Integer tradeHistoryId;
@@ -36,6 +38,22 @@ public class RefundInfo {
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+
+	public Integer getAccount() {
+		return account;
+	}
+
+	public void setAccount(Integer account) {
+		this.account = account;
+	}
+
+	public Integer getSource() {
+		return source;
+	}
+
+	public void setSource(Integer source) {
+		this.source = source;
 	}
 
 	public Integer getOrderId() {
@@ -160,7 +178,7 @@ public class RefundInfo {
 
 	// 状态
 	public static enum REFUND_STATE_ENUM {
-		DAICHULI(0), CHULIZHONG(1), YICHULI(2), YISHANCHU(3);
+		DAICHULI(0), CHULIZHONG(1), YICHULI(2), YISHANCHU(3), ZANTING(4);
 		private Integer state;
 
 		private REFUND_STATE_ENUM(Integer state) {

@@ -4,6 +4,8 @@
   <resultMap id="BaseResultMap" type="com.yixiang.api.recharge.pojo.RechargeInfo">
     <result column="t_id" jdbcType="INTEGER" property="id" />
     <result column="t_user_id" jdbcType="INTEGER" property="userId" />
+    <result column="t_account" jdbcType="INTEGER" property="account" />
+    <result column="t_source" jdbcType="INTEGER" property="source" />
     <result column="t_template_id" jdbcType="INTEGER" property="templateId" />
     <result column="t_price" jdbcType="REAL" property="price" />
     <result column="t_bonus" jdbcType="REAL" property="bonus" />
@@ -18,7 +20,8 @@
   <sql id="Base_Column_List">
     t.id as t_id, t.user_id as t_user_id, t.template_id as t_template_id, t.price as t_price, 
     t.bonus as t_bonus, t.pay_way as t_pay_way, t.out_trade_no as t_out_trade_no, t.trade_no as t_trade_no, 
-    t.state as t_state, t.create_time as t_create_time, t.pay_time as t_pay_time, t.refund_time as t_refund_time
+    t.state as t_state, t.create_time as t_create_time, t.pay_time as t_pay_time, t.refund_time as t_refund_time,
+    t.account as t_account, t.source as t_source
   </sql>
   <select id="selectByExample" parameterType="com.yixiang.api.util.pojo.QueryExample" resultMap="BaseResultMap">
     select
@@ -45,6 +48,12 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userId != null">
         user_id,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="source != null">
+        source,
       </if>
       <if test="templateId != null">
         template_id,
@@ -80,6 +89,12 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=INTEGER},
       </if>
       <if test="templateId != null">
         #{templateId,jdbcType=INTEGER},
@@ -124,6 +139,12 @@
     <set>
       <if test="record.userId != null">
         t.user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.account != null">
+        t.account = #{record.account,jdbcType=INTEGER},
+      </if>
+      <if test="record.source != null">
+        t.source = #{record.source,jdbcType=INTEGER},
       </if>
       <if test="record.templateId != null">
         t.template_id = #{record.templateId,jdbcType=INTEGER},

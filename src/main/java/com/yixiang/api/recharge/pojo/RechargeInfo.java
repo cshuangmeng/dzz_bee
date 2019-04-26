@@ -6,6 +6,8 @@ public class RechargeInfo {
 
 	private Integer id;
 	private Integer userId;
+	private Integer account;
+	private Integer source;
 	private Integer templateId;
 	private Float price;
 	private Float bonus;
@@ -31,6 +33,22 @@ public class RechargeInfo {
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+
+	public Integer getAccount() {
+		return account;
+	}
+
+	public void setAccount(Integer account) {
+		this.account = account;
+	}
+
+	public Integer getSource() {
+		return source;
+	}
+
+	public void setSource(Integer source) {
+		this.source = source;
 	}
 
 	public Integer getTemplateId() {

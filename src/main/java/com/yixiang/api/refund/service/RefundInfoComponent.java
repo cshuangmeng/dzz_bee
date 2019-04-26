@@ -22,9 +22,11 @@ public class RefundInfoComponent {
 	
 	//保存退款信息
 	@Transactional
-	public void saveRefundInfo(Integer userId,Integer orderId,Integer orderType,Float third,Float balance
-			,String outTradeNo,Integer payWay,String reason,Integer state,Integer tradeHistoryId){
+	public void saveRefundInfo(Integer account,Integer source,Integer userId,Integer orderId,Integer orderType
+			,Float third,Float balance,String outTradeNo,Integer payWay,String reason,Integer state,Integer tradeHistoryId){
 		RefundInfo refund=new RefundInfo();
+		refund.setAccount(account);
+		refund.setSource(source);
 		refund.setBalancePrice(null!=balance?balance:0);
 		refund.setCreateTime(new Date());
 		refund.setOrderId(orderId);

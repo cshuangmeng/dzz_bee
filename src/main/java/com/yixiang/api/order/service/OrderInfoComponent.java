@@ -98,7 +98,8 @@ public class OrderInfoComponent {
 					,"userName",user.getUserName(),"phone",user.getPhone(),"totalPrice",i.getTotalPrice()
 					,"state",i.getState(),"remark",i.getRemark(),"payPrice",i.getPayPrice(),"refundPrice",null!=refund?refund.getTotalPrice():null
 					,"stationName",null!=station?station.getTitle():null,"stationProvider",null!=station?station.getProvider():null
-					,"chargeState",i.getChargeState());
+					,"chargeState",i.getChargeState(),"totalPower",i.getTotalPower(),"totalPowerPrice",i.getTotalPowerPrice()
+					,"totalServiceFee",i.getTotalServiceFee());
 		}).collect(Collectors.toList());
 		return DataUtil.mapOf("total",total,"dataset",dataset);
 	}
@@ -130,7 +131,7 @@ public class OrderInfoComponent {
 		Integer state=TradeHistory.TRADE_STATE_ENUM.YICHULI.getState();
 		TradeHistory history=tradeHistoryComponent.saveTradeHistory(order.getUserId(), order.getId(), tradeType
 				, refundPrice.floatValue(), state, null);
-		refundInfoComponent.saveRefundInfo(order.getUserId(), order.getId(), orderType, 0F
+		refundInfoComponent.saveRefundInfo(null, null, order.getUserId(), order.getId(), orderType, 0F
 				, refundPrice.floatValue(), null, order.getPayWay(), null, state, history.getId());
 		RefundSummary summary=refundSummaryComponent.getRefundSummary(order.getId(), orderType);
 		if(null!=summary){

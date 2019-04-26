@@ -99,8 +99,8 @@ public class RechargeInfoComponent {
 		userInfoComponent.updateUserInfo(user);
 		//记录流水
 		TradeHistory history=tradeHistoryComponent.saveTradeHistory(user.getId(), recharge.getId(), tradeType, -third, null, null);
-		refundInfoComponent.saveRefundInfo(user.getId(), recharge.getId(), orderType, third, 0F, recharge.getOutTradeNo()
-				, recharge.getPayWay(), reason, null, history.getId());
+		refundInfoComponent.saveRefundInfo(recharge.getAccount(),recharge.getSource(),user.getId(), recharge.getId()
+				, orderType, third, 0F, recharge.getOutTradeNo(), recharge.getPayWay(), reason, null, history.getId());
 		refundSummaryComponent.updateRefundSummary(summary);
 		updateRechargeInfoState(recharge.getId(), null, RechargeInfo.STATE_TYPE_ENUM.REFUNDED.getState());
 	}
