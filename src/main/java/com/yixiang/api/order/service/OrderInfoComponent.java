@@ -95,7 +95,7 @@ public class OrderInfoComponent {
 				refund=refundInfoComponent.getRefundInfo(i.getId(),RefundSummary.ORDER_TYPE_ENUM.CHARGING.getType());
 			}
 			return DataUtil.mapOf("id",i.getId(),"userId",user.getId(),"createTime",i.getCreateTime(),"payTime",i.getPayTime()
-					,"userName",user.getUserName(),"phone",user.getPhone(),"totalPrice",i.getTotalPrice()
+					,"userName",user.getUserName(),"phone",user.getPhone(),"totalPrice",i.getTotalPrice(),"chargeId",i.getChargeId()
 					,"state",i.getState(),"remark",i.getRemark(),"payPrice",i.getPayPrice(),"refundPrice",null!=refund?refund.getTotalPrice():null
 					,"stationName",null!=station?station.getTitle():null,"stationProvider",null!=station?station.getProvider():null
 					,"chargeState",i.getChargeState(),"totalPower",i.getTotalPower(),"totalPowerPrice",i.getTotalPowerPrice()
